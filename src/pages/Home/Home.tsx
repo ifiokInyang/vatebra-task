@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { styled, css } from "styled-components";
+import { searchCountry } from "../../features/api/api";
 import { HeaderContainerProps } from "../../utils/interfaces";
 
 const Container = styled.div`
@@ -38,11 +40,12 @@ const HeaderTextContainer = styled.div<HeaderContainerProps>`
   `};
 `;
 
-const HeaderText = styled.p`
+const HeaderText = styled.p``;
 
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
-
-const SearchContainer = styled.div``;
 const Circle = styled.div`
   width: 20px;
   height: 20px;
@@ -51,7 +54,30 @@ const Circle = styled.div`
 `;
 const CountryDetailsContainer = styled.div``;
 
+const InputContainer = styled.input``;
+const SearchButton = styled.button`
+  padding: 7px 10px;
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+`;
+const SearchSubcontainer = styled.div`
+  display: flex;
+`;
+
 const Home = () => {
+  const [search, setSearch] = useState<string>("");
+  const dispatch = useDispatch();
+
+  const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSearch = () => {
+    searchCountry(dispatch, search);
+  };
+
   return (
     <Container>
       <CountriesContainer>
@@ -68,6 +94,17 @@ const Home = () => {
         <SearchContainer>
           <HeaderTextContainer>
             <HeaderText>Keyword</HeaderText>
+            <SearchSubcontainer>
+              <InputContainer
+                type="text"
+                placeholder="Type to search..."
+                value={search}
+                onChange={handleQuery}
+              />
+              <SearchButton type="button" onClick={handleSearch}>
+                Search
+              </SearchButton>
+            </SearchSubcontainer>
           </HeaderTextContainer>
         </SearchContainer>
         <CountryDetailsContainer></CountryDetailsContainer>
