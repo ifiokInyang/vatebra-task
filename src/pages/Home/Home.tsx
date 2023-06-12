@@ -1,25 +1,42 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchCountry } from "../../features/api/api";
+import {
+  searchCountry,
+  showCountryDetails,
+  hideCountryDetails,
+} from "../../features/api/api";
 import { countryDetails } from "../../features/countries/countrySlice";
 import { SingleCountry } from "../../utils/interfaces";
 import { StylesContainer } from "../../components/Styles/Styles";
 
 const Home = () => {
   const [search, setSearch] = useState<string>("");
+  const [visibleCountry, setVisibleCountry] = useState<string>("");
+
   const dispatch = useDispatch();
 
   const country = useSelector(countryDetails);
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-  };
-
-  const handleSearch = () => {
     searchCountry(dispatch, search);
   };
 
-  const showDetails = () => {};
+  const handleSearch = () => {
+    setVisibleCountry("");
+
+    searchCountry(dispatch, search);
+  };
+
+  const handleShowDetails = (countryName: string) => {
+    if (visibleCountry === countryName) {
+      hideCountryDetails(dispatch);
+      setVisibleCountry("");
+    } else {
+      showCountryDetails(dispatch, countryName);
+      setVisibleCountry(countryName);
+    }
+  };
 
   return (
     <StylesContainer.Container>
@@ -37,16 +54,23 @@ const Home = () => {
           </StylesContainer.HeaderTextContainer>
         </StylesContainer.HeadingContainer>
         <StylesContainer.SearchContainer>
-          <StylesContainer.HeaderTextContainer>
-            <StylesContainer.HeaderText>Keyword</StylesContainer.HeaderText>
-          </StylesContainer.HeaderTextContainer>
+          <StylesContainer.HeaderText paddingleft={54}>
+            Keyword
+          </StylesContainer.HeaderText>
 
           <StylesContainer.SearchSubcontainer>
             <StylesContainer.InputContainer
               type="text"
-              placeholder="Type to search..."
+              placeholder="Type country name to search..."
               value={search}
               onChange={handleQuery}
+              onKeyDown={(
+                event: React.KeyboardEventHandler<HTMLInputElement> | any
+              ) => {
+                if (event.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
             <StylesContainer.SearchButton type="button" onClick={handleSearch}>
               Search
@@ -74,10 +98,23 @@ const Home = () => {
                   </StylesContainer.HeaderText>
                   <StylesContainer.SearchButton
                     type="button"
-                    onClick={showDetails}
+                    width={150}
+                    onClick={() => handleShowDetails(country.name.official)}
                   >
-                    See details
+                    {visibleCountry === country.name.official
+                      ? "See less"
+                      : "See details"}
                   </StylesContainer.SearchButton>
+                  {visibleCountry === country.name.official && (
+                    <StylesContainer.VisibleContainer>
+                      <StylesContainer.HeaderText>
+                        Population: {country.population}
+                      </StylesContainer.HeaderText>
+                      <StylesContainer.HeaderText>
+                        Capital: {country.capital}
+                      </StylesContainer.HeaderText>
+                    </StylesContainer.VisibleContainer>
+                  )}
                 </StylesContainer.CountryItem>
               )
             )

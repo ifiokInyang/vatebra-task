@@ -1,4 +1,4 @@
-import { apiRequest } from "../../utils/api/requestMethod";
+import apiRequest from "../../utils/api";
 import {
   searchFailure,
   searchStart,
@@ -9,7 +9,19 @@ export const searchCountry = async (dispatch: any, search: string) => {
   dispatch(searchStart());
   try {
     const response = await apiRequest.get(
-      `/name/${search}?fields=name,flags,continents`
+      `/name/${search}?fields=name,flag,flags,continents`
+    );
+    dispatch(searchSuccess(response.data));
+  } catch (error) {
+    dispatch(searchFailure());
+  }
+};
+
+export const showCountryDetails = async (dispatch: any, country: string) => {
+  dispatch(searchStart());
+  try {
+    const response = await apiRequest.get(
+      `/name/${country}`
     );
     console.log("res is ", response.data);
     dispatch(searchSuccess(response.data));
@@ -17,3 +29,7 @@ export const searchCountry = async (dispatch: any, search: string) => {
     dispatch(searchFailure());
   }
 };
+
+export const hideCountryDetails = async (dispatch: any) => {
+  return null;
+}

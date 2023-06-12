@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components";
-import { HeaderContainerProps } from "../../utils/interfaces";
+import {
+  HeaderContainerProps,
+  IButton,
+  IHeaderText,
+} from "../../utils/interfaces";
 
 export const StylesContainer = {
   Container: styled.div`
@@ -41,13 +45,18 @@ export const StylesContainer = {
         flex: ${flex};
       `};
   `,
-  HeaderText: styled.p`
+  HeaderText: styled.p<IHeaderText>`
     font-size: 20px;
+    ${({ paddingleft }) =>
+      paddingleft &&
+      css`
+        padding-left: ${paddingleft}px;
+      `};
   `,
+  VisibleContainer: styled.div``,
   SearchContainer: styled.div`
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     margin: 30px 0;
   `,
@@ -67,13 +76,19 @@ export const StylesContainer = {
     width: 50%;
     font-size: 20px;
   `,
-  SearchButton: styled.button`
+  SearchButton: styled.button<IButton>`
     padding: 7px 10px;
     background-color: black;
     color: white;
     font-weight: 600;
+    height: 50px;
+    font-size: 20px;
     cursor: pointer;
-    width: 120px;
+    ${({ width }) =>
+      width &&
+      css`
+        width: ${width}px;
+      `};
   `,
   SearchSubcontainer: styled.div`
     display: flex;
@@ -93,8 +108,8 @@ export const StylesContainer = {
     height: 20px;
     margin-right: 20px;
   `,
-    Loading: styled.div`
-  margin: 20px;
-  font-size: 24px
-    `
+  Loading: styled.div`
+    margin: 20px;
+    font-size: 24px;
+  `,
 };
