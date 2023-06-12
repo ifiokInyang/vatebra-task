@@ -11,7 +11,7 @@ export const searchCountry = async (dispatch: any, search: string) => {
     const response = await apiRequest.get(
       `/name/${search}?fields=name,flags,continents`
     );
-    console.log(response.data);
+    console.log("res is ", response.data);
     dispatch(searchSuccess(response.data));
   } catch (error) {
     dispatch(searchFailure());

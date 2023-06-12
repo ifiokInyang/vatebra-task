@@ -4,7 +4,7 @@ import { ICountry } from "../../utils/interfaces";
 const countrySlice = createSlice({
   name: "country",
   initialState: {
-    currentUser: null,
+    currentCountry: [],
     isFetching: false,
     error: false,
   } as ICountry,
@@ -14,7 +14,7 @@ const countrySlice = createSlice({
     },
     searchSuccess: (state, action) => {
       state.isFetching = false;
-      state.currentUser = action.payload;
+      state.currentCountry = action.payload;
     },
     searchFailure: (state) => {
       state.isFetching = false;
@@ -23,7 +23,7 @@ const countrySlice = createSlice({
   },
 });
 
-export const countryDetails = (state: { country: ICountry }) => state.country;
+export const countryDetails = (state: { countries: ICountry }) => state.countries;
 
 export const { searchStart, searchSuccess, searchFailure } =
   countrySlice.actions;

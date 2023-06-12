@@ -1,74 +1,15 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { styled, css } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import { searchCountry } from "../../features/api/api";
-import { HeaderContainerProps } from "../../utils/interfaces";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-`;
-const CountriesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 2px solid black;
-  width: 60%;
-  height: 90%;
-`;
-const HeadingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 3rem;
-  border-bottom: 2px solid black;
-`;
-const CircleContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex: 0.8;
-`;
-const HeaderTextContainer = styled.div<HeaderContainerProps>`
-  ${({ display }) => css`
-    display: ${display};
-  `};
-  justify-content: center;
-  ${({ flex }) => css`
-    flex: ${flex};
-  `};
-`;
-
-const HeaderText = styled.p``;
-
-const SearchContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const Circle = styled.div`
-  width: 20px;
-  height: 20px;
-  border: 2px solid black;
-  border-radius: 50%;
-`;
-const CountryDetailsContainer = styled.div``;
-
-const InputContainer = styled.input``;
-const SearchButton = styled.button`
-  padding: 7px 10px;
-  background-color: black;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-`;
-const SearchSubcontainer = styled.div`
-  display: flex;
-`;
+import { countryDetails } from "../../features/countries/countrySlice";
+import { SingleCountry } from "../../utils/interfaces";
+import { StylesContainer } from "../../components/Styles/Styles";
 
 const Home = () => {
   const [search, setSearch] = useState<string>("");
   const dispatch = useDispatch();
+
+  const country = useSelector(countryDetails);
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -78,38 +19,72 @@ const Home = () => {
     searchCountry(dispatch, search);
   };
 
+  const showDetails = () => {};
+
   return (
-    <Container>
-      <CountriesContainer>
-        <HeadingContainer>
-          <CircleContainer>
-            <Circle></Circle>
-            <Circle></Circle>
-            <Circle></Circle>
-          </CircleContainer>
-          <HeaderTextContainer display="flex" flex={4}>
-            <HeaderText>Countries Catalog</HeaderText>
-          </HeaderTextContainer>
-        </HeadingContainer>
-        <SearchContainer>
-          <HeaderTextContainer>
-            <HeaderText>Keyword</HeaderText>
-            <SearchSubcontainer>
-              <InputContainer
-                type="text"
-                placeholder="Type to search..."
-                value={search}
-                onChange={handleQuery}
-              />
-              <SearchButton type="button" onClick={handleSearch}>
-                Search
-              </SearchButton>
-            </SearchSubcontainer>
-          </HeaderTextContainer>
-        </SearchContainer>
-        <CountryDetailsContainer></CountryDetailsContainer>
-      </CountriesContainer>
-    </Container>
+    <StylesContainer.Container>
+      <StylesContainer.CountriesContainer>
+        <StylesContainer.HeadingContainer>
+          <StylesContainer.CircleContainer>
+            <StylesContainer.Circle></StylesContainer.Circle>
+            <StylesContainer.Circle></StylesContainer.Circle>
+            <StylesContainer.Circle></StylesContainer.Circle>
+          </StylesContainer.CircleContainer>
+          <StylesContainer.HeaderTextContainer display="flex" flex={4}>
+            <StylesContainer.HeaderText>
+              Countries Catalog
+            </StylesContainer.HeaderText>
+          </StylesContainer.HeaderTextContainer>
+        </StylesContainer.HeadingContainer>
+        <StylesContainer.SearchContainer>
+          <StylesContainer.HeaderTextContainer>
+            <StylesContainer.HeaderText>Keyword</StylesContainer.HeaderText>
+          </StylesContainer.HeaderTextContainer>
+
+          <StylesContainer.SearchSubcontainer>
+            <StylesContainer.InputContainer
+              type="text"
+              placeholder="Type to search..."
+              value={search}
+              onChange={handleQuery}
+            />
+            <StylesContainer.SearchButton type="button" onClick={handleSearch}>
+              Search
+            </StylesContainer.SearchButton>
+          </StylesContainer.SearchSubcontainer>
+        </StylesContainer.SearchContainer>
+        <StylesContainer.CountryDetailsContainer>
+          {country.isFetching ? (
+            <StylesContainer.Loading>loading...</StylesContainer.Loading>
+          ) : (
+            country.currentCountry?.map(
+              (country: SingleCountry, index: number) => (
+                <StylesContainer.CountryItem key={index}>
+                  <StylesContainer.CountryHeader>
+                    <StylesContainer.CountryImage
+                      src={country.flags.png}
+                      alt={country.flags.alt}
+                    />
+                    <StylesContainer.HeaderText>
+                      {country.name.common}
+                    </StylesContainer.HeaderText>
+                  </StylesContainer.CountryHeader>
+                  <StylesContainer.HeaderText>
+                    Continent: {country.continents}
+                  </StylesContainer.HeaderText>
+                  <StylesContainer.SearchButton
+                    type="button"
+                    onClick={showDetails}
+                  >
+                    See details
+                  </StylesContainer.SearchButton>
+                </StylesContainer.CountryItem>
+              )
+            )
+          )}
+        </StylesContainer.CountryDetailsContainer>
+      </StylesContainer.CountriesContainer>
+    </StylesContainer.Container>
   );
 };
 
