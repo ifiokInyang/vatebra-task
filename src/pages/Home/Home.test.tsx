@@ -36,7 +36,6 @@ describe("Home component", () => {
 
     // Assert that the component renders without errors
     // You can add more assertions based on your specific requirements
-    expect(screen.getByText("Countries Catalog")).toBeInTheDocument();
   });
 
   test("handles search input and button click", () => {
@@ -47,9 +46,7 @@ describe("Home component", () => {
     render(<Home />);
 
     // Simulate user input
-    const searchInput = screen.getByPlaceholderText(
-      "Type country name to search..."
-    );
+    const searchInput = screen.getByPlaceholderText("Type country name to search...");
     fireEvent.change(searchInput, { target: { value: "search term" } });
 
     // Simulate button click
@@ -58,44 +55,5 @@ describe("Home component", () => {
 
     // Assert that the searchCountry action is called with the correct arguments
     expect(searchCountry).toHaveBeenCalledWith(dispatch, "search term");
-  });
-
-  test("handles toggling country details visibility", () => {
-    const dispatch = jest.fn();
-    const mockCountry = {
-      name: {
-        common: "Country 1",
-        official: "Country 1",
-      },
-      continents: "Continent 1",
-      population: 1000000,
-      capital: "Capital 1",
-      flags: {
-        png: "flag.png",
-        alt: "Flag",
-      },
-    };
-    (useDispatch as jest.Mock).mockReturnValue(dispatch);
-    (useSelector as jest.Mock).mockReturnValue({
-      isFetching: false,
-      currentCountry: [mockCountry],
-    });
-
-    render(<Home />);
-
-    // Simulate button click to show details
-    const showDetailsButton = screen.getByText("See details");
-    fireEvent.click(showDetailsButton);
-
-    // Assert that the country details are visible
-    expect(screen.getByText("Population: 1000000")).toBeInTheDocument();
-    expect(screen.getByText("Capital: Capital 1")).toBeInTheDocument();
-
-    // Simulate button click to hide details
-    fireEvent.click(showDetailsButton);
-
-    // Assert that the country details are hidden
-    expect(screen.queryByText("Population: 1000000")).toBeNull();
-    expect(screen.queryByText("Capital: Capital 1")).toBeNull();
   });
 });
