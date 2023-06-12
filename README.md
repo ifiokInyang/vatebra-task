@@ -13,6 +13,13 @@ https://github.com/ifiokInyang/vatebra-task.git
 
 ### `yarn`
 
+In the root directory, you can then:
+
+### `Create a .env file using the .env-sample`
+
+## With the `REACT_APP_SERVER_URL` as key, add the value url "https://restcountries.com/v3.1".
+
+
 In the project directory, you can then run:
 
 ### `yarn start`

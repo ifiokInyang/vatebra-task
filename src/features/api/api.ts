@@ -23,7 +23,6 @@ export const showCountryDetails = async (dispatch: any, country: string) => {
     const response = await apiRequest.get(
       `/name/${country}`
     );
-    console.log("res is ", response.data);
     dispatch(searchSuccess(response.data));
   } catch (error) {
     dispatch(searchFailure());
