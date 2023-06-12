@@ -32,4 +32,4 @@ Builds the app for production to the `build` folder.\
 
 To preview the project, click here
 
-### `https://vatebra-task.netlify.app/`
+### `[https://vatebra-task.netlify.app/](https://vatebra-task.netlify.app/)`
